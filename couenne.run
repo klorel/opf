@@ -6,7 +6,6 @@ data WB5.dat;
 
 
 option solver couenne;
-# option presolve 0;
 solve;
 #write gtoto;
 display p_gen.slack, q_gen.slack;

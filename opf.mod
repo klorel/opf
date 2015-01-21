@@ -1,44 +1,50 @@
 reset;
 param baseMVA;
 set bus_i;
-param type{bus_i};
-param Pd{bus_i};
-param Qd{bus_i};
-param Gs{bus_i};
-param Bs{bus_i};
-param area{bus_i};
-param Vm{bus_i};
-param Va{bus_i};
+param type  {bus_i};
+param Pd    {bus_i};
+param Qd    {bus_i};
+param Gs    {bus_i};
+param Bs    {bus_i};
+param area  {bus_i};
+param Vm    {bus_i};
+param Va    {bus_i};
 param baseKV{bus_i};
-param zone{bus_i};
-param Vmax{bus_i};
-param Vmin{bus_i};
+param zone  {bus_i};
+param Vmax  {bus_i};
+param Vmin  {bus_i};
 
 set gen_i within bus_i;
-param Pg      {gen_i};
-param Qg      {gen_i};
-param Qmax    {gen_i};
-param Qmin    {gen_i};
-param Vg      {gen_i};
-param mBase   {gen_i};
-param gen_status  {gen_i};
-param Pmax    {gen_i};
-param Pmin    {gen_i};
+param Pg        {gen_i};
+param Qg        {gen_i};
+param Qmax      {gen_i};
+param Qmin      {gen_i};
+param Vg        {gen_i};
+param mBase     {gen_i};
+param gen_status{gen_i};
+param Pmax      {gen_i};
+param Pmin      {gen_i};
+
+
 
 set branch dimen 2;
-param r     {branch};
-param x     {branch};
-param b     {branch};
-param rateA {branch};
-param rateB {branch};
-param rateC {branch};
-param ratio {branch};
-param angle {branch};
+param r            {branch};
+param x            {branch};
+param b            {branch};
+param rateA        {branch};
+param rateB        {branch};
+param rateC        {branch};
+param ratio        {branch};
+param angle        {branch};
 param branch_status{branch};
 
-param c0{gen_i};
-param c1{gen_i};
-param c2{gen_i};
+
+param startup {gen_i};
+param shutdown{gen_i};
+param n       {gen_i};
+param c0      {gen_i};
+param c1      {gen_i};
+param c2      {gen_i};
 
 ###
 # other parameter
