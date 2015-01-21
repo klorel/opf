@@ -1,0 +1,19 @@
+model opf.mod;
+
+# data WB2.dat;
+# data LMBM3.dat;
+data WB5.dat;
+
+
+option solver couenne;
+# option presolve 0;
+solve;
+#write gtoto;
+display p_gen.slack, q_gen.slack;
+display p_balance.slack, q_balance.slack;
+display ctr_v_min.slack, ctr_v_max.slack;
+# expand;
+fix;
+display act_cost;
+display v_re, v_im;
+display p_or, p_ex, q_or, q_ex;

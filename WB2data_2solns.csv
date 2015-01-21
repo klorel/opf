@@ -1,0 +1,24 @@
+Local Solution 1
+Objective Value= 905.72820650
+Bus,Voltage,Angle(deg)
+1,0.95000000,0.00000000
+2,0.97607034,-64.94000000
+Generation
+Bus,P(MW),Q(MVars)
+1,452.86410325,164.32051624
+Line Flows
+from,to,P(MW),Q(MW),Line Loss(MW)
+1,2,452.86410325,164.32051624,102.86410325,
+
+Local Solution 2
+Objective Value= 877.77777423
+Bus,Voltage,Angle(deg)
+1,0.95233631,0.00000000
+2,1.05000000,-57.14427699
+Generation
+Bus,P(MW),Q(MVars)
+1,438.88888711,94.44443557
+Line Flows
+from,to,P(MW),Q(MW),Line Loss(MW)
+1,2,438.88888711,94.44443557,88.88888711,
+
