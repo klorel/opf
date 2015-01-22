@@ -8,9 +8,10 @@ param: bus_i: type	Pd	    Qd   Gs	Bs	area	Vm	    Va	  baseKV	zone	Vmax	Vmin :=
 ;
 
 param: gen_i:Pg	Qg	Qmax	Qmin	    Vg	mBase	gen_status	Pmax	Pmin :=
-	1   0	0	10   	-10	        1 	100  	1	    10	    0
-    5   0	0	10   	61.81e-2	        1 	100  	1	    10	    0
-#    5   0	0	10   	20.65e-2	        1 	100  	1	    10	    0
+1   0	0	10   	-10	        1 	100  	1	    10	    0
+#    5   0	0	10   	61.81e-2	        1 	100  	1	    10	    0
+#    5   0	0	10   	51.52e-2	        1 	100  	1	    10	    0
+    5   0	0	10   	-30.80e-2	        1 	100  	1	    10	    0
 ;
 
 param: branch : r	 x	    b	    rateA	rateB	rateC	ratio	angle	branch_status :=

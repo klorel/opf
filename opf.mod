@@ -138,3 +138,14 @@ minimize act_cost: sum{gen in gen_i}(c0[gen]+c1[gen]*p_gen[gen]+c2[gen]*p_gen[ge
 
 subject to ctr_v_min{bus in bus_i}: Vmin[bus]^2 <= v_re[bus]^2+v_im[bus]^2;
 subject to ctr_v_max{bus in bus_i}: Vmax[bus]^2 >= v_re[bus]^2+v_im[bus]^2;
+
+subject to ref_bus_re{bus in bus_i:type[bus]==3}:v_re[bus]>= 0;
+subject to ref_bus_im{bus in bus_i:type[bus]==3}:v_im[bus] = 0;
+
+# PQ
+#subject to ref_bus_re{bus in bus_i:type[bus]==1}:v_re[bus]>=0;
+#subject to ref_bus_im{bus in bus_i:type[bus]==1}:v_im[bus]= 0;
+# PV
+#subject to ref_bus_re{bus in bus_i:type[bus]==2}:v_re[bus]=Vm[bus]*cos(Va[bus]);
+#subject to ref_bus_im{bus in bus_i:type[bus]==2}:v_im[bus]=Vm[bus]*sin(Va[bus]);
+
