@@ -1,3 +1,4 @@
+
 #
 # Couenne options
 #
@@ -22,8 +23,8 @@
 #
 # We refer the curious user of Couenne to this paper for more insight
 # on how the options are used.
-lp_solver clp
 
+lp_solver cplex
 
 #
 # Verbosity/output level options
@@ -70,7 +71,7 @@ pseudocost_mult interval_br_rev
 # pseudocosts. Can give a better estimate of the change in the node as
 # a result of the branching rule.
 
-pseudocost_mult_lp no
+pseudocost_mult_lp yes
 
 
 # Use Special Ordered Sets (SOS) as indicated in the MINLP
@@ -162,7 +163,7 @@ branch_pt_select mid-point
 # branching. Experimentally, Violation Transfer appears slightly
 # better, hence it is preferred by default.
 
-red_cost_branching no
+red_cost_branching yes
 
 
 # Type of branching object for variable selection
@@ -181,7 +182,9 @@ red_cost_branching no
 #   var_obj   use one object for each variable
 #   expr_obj  use one object for each nonlinear expression
 
+#branching_object var_obj
 branching_object expr_obj
+#branching_object vt_obj
 
 
 
@@ -233,7 +236,8 @@ aggressive_fbbt yes
 #
 # A parameter analogous to what log_num_obbt_per_level is for OBBT.
 
-log_num_abt_per_level 2
+#log_num_abt_per_level 2
+log_num_abt_per_level 2000
 
 
 #
@@ -275,7 +279,8 @@ violated_cuts_only yes
 # Artificial cutoff. Used when you know a feasible solution and want
 # to use it to restrict the solution space
 
-#art_cutoff 1e100
+art_cutoff 1e100
+#art_cutoff 903
 
 # Window around known optimum
 #opt_window 
@@ -312,7 +317,7 @@ log_num_local_optimization_per_level 2
 # A solution is feasible for the original problem if the maximum
 # violation of a constraint is below this number
 
-feas_tolerance 1e-4
+feas_tolerance 1e-6
 
 
 # Use quadratic expressions and related exprQuad class

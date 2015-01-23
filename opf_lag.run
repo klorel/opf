@@ -1,0 +1,103 @@
+model opf_lag.mod;
+
+data WB2.dat;
+#data LMBM3.dat;
+#data WB5.dat;
+#data case9mod.dat;
+#data case14mod.dat;
+#data case39mod3.dat;
+option presolve_eps 1e-6;
+option master.solver cplexamp;
+option master.presolve 0;
+option master.cplex_options 'outlev=1';
+option master.solver_msg 0;
+
+option subproblem.solver_msg 0;
+param USE_HEURISTIC default 1; 
+param ORACLE symbolic default "KNITRO";
+set set_basis;
+param lb;
+repeat{
+	###
+	#
+	###
+	problem master;
+	unfix lambda;
+	#expand;
+	solve>cplex.log;
+	let lb := master_obj;
+	let set_basis := {ite in 1..nIte:lambda[ite].sstatus == 'bas'};
+	#display  master_basis;
+	let{bus in bus_i} dual_p[bus] := p_balance[bus].dual;
+	let{bus in bus_i} dual_q[bus] := q_balance[bus].dual;
+	
+	#let{bus in bus_i} dual_vmin[bus] := ctr_v_min[bus];
+	#let{bus in bus_i} dual_vmax[bus] := ctr_v_max[bus];
+	let dual_convexity := convexity.dual;
+	#display master_obj;
+	#display dual_p, dual_q;
+	#display dual_convexity;
+	#display lambda;
+	###
+	#
+	###	
+	problem subproblem;
+	option reset_initial_guesses 1;
+	#option subproblem.presolve 0;
+	if nIte > 0 then{
+		let{bus in bus_i} v_re[bus] := V_re[nIte,bus];
+		let{bus in bus_i} v_im[bus] := V_im[nIte,bus];
+	}
+	unfix lambda;
+	fix{ite in 1..nIte diff master_basis} lambda[ite];
+	#display sub_obj;
+	let ORACLE := "KNITRO";
+	option subproblem.solver knitroampl;
+	option subproblem.knitro_options 'outlev=0 ms_enable=0';
+	close knitro.log;
+	let master_basis := set_basis;
+	solve>knitro.log;
+	let master_basis := {};
+	if sub_obj>=-1e-6 then{
+		let master_basis := set_basis;
+		let ORACLE := "KNITRO2";
+		option subproblem.solver knitroampl;
+		option subproblem.knitro_options 'outlev=0 ms_enable=1 ms_maxsolves=10';
+		solve>knitro.log;
+		close knitro.log;
+		let master_basis := {};
+	}
+	if sub_obj>=-1e-6 then{
+		let master_basis := set_basis;
+		option subproblem.solver couenne;
+		option subproblem.couenne_options 'outlev=1';		
+		solve;#>couenne.log;
+		let ORACLE := "COUENNE";
+		let master_basis := {};
+	}
+	#display sub_obj;
+	let nIte := nIte +1;	 
+	let{bus in bus_i} V_re[nIte,bus] := v_re[bus];
+	let{bus in bus_i} V_im[nIte,bus] := v_im[bus];
+	#display v_re, v_im;
+	if sub_obj>=-1e-6 then{
+		if FEASIBILITY == 0 then {
+         	printf "\n*** OPTIMAL SOLUTION ***\n";
+         	printf "LowerBound       : %q\n", master_obj;
+         	printf "Min reduced cost : %q\n", sub_obj;
+         	display card(master_basis);
+         	fix;
+         	break;
+         }else {
+			if master_obj > 1e-6 then{
+				printf "\n*** NO FEASIBLE SOLUTION ***\n";
+				break;
+			}else{
+				printf "\n*** PHASE 2 ***\n";
+				let FEASIBILITY := 0;					
+			}
+      }
+	};
+ 	#display FEASIBILITY;
+ 	printf "%6d%10s%20.6f%20.6f%10s\n", if FEASIBILITY == 1 then "PHASE1" else "PHASE2", nIte, lb, sub_obj, ORACLE;
+};

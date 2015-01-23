@@ -1,14 +1,15 @@
 model opf.mod;
 
-# data WB2.dat;
-# data LMBM3.dat;
+data WB2.dat;
+#data LMBM3.dat;
 #data WB5.dat;
-data case9mod.dat;
+#data case9mod.dat;
 #data case14mod.dat;
 #data case39mod3.dat;
 
 
 option solver couenne;
+#option solver cplexamp;
 solve;
 #write gtoto;
 #display p_gen.slack, q_gen.slack;
@@ -20,3 +21,5 @@ solve;
 #display p_or, p_ex, q_or, q_ex;
 
 fix;
+#display hProduct;
+#expand p_balance;

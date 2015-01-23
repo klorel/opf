@@ -79,10 +79,10 @@ var v_re{bus_i};
 var v_im{bus_i};
 
 var p_gen{gen in gen_i}
-  >= Pmin[gen]/100, <= Pmax[gen]/100
+  >= Pmin[gen]*100, <= Pmax[gen]*100
   ;
 var q_gen{gen in gen_i} 
-  >= Qmin[gen]/100, <= Pmax[gen]/100
+  >= Qmin[gen]*100, <= Pmax[gen]*100
   ;
 
 # linear equation I=YV
@@ -112,25 +112,83 @@ var  i_ex_im{(l,m) in branch} = +y21_re[l,m]*v_im[l]+y21_im[l,m]*v_re[l]+y22_re[
 # s_or = y_11* v_or v_or* + y_12* v_or v_ex*
 # s_ex = y_22* v_ex v_ex* + y_21* v_ex v_or*
 
-
 var  p_or{(l,m) in branch} = +y11_re[l,m]*v_hProd_re[l,l]+y12_re[l,m]*v_hProd_re[l,m]+y12_im[l,m]*v_hProd_im[l,m];
-var  q_or{(l,m) in branch} = -y11_im[l,m]*v_hProd_re[l,l]+y12_re[l,m]*v_hProd_im[l,m]-y12_im[l,m]*v_hProd_re[l,m];
 var  p_ex{(l,m) in branch} = +y21_re[l,m]*v_hProd_re[m,l]+y21_im[l,m]*v_hProd_im[m,l]+y22_re[l,m]*v_hProd_re[m,m];
-var  q_ex{(l,m) in branch} = +y21_re[l,m]*v_hProd_im[m,l]-y21_im[l,m]*v_hProd_re[m,l]-y22_im[l,m]*v_hProd_re[m,m];
+# sur bilan bus1
+#	+sum{(bus1, bus2) in branch} 
+#	+y11_re[bus1, bus2]*v_re[bus1]*v_re[bus1]
+#	+y11_re[bus1, bus2]*v_im[bus1]*v_im[bus1]
+#	+y12_re[bus1, bus2]*v_re[bus1]*v_re[bus2]
+#	+y12_re[bus1, bus2]*v_im[bus1]*v_im[bus2]
+#	+y12_im[bus1, bus2]*v_im[bus1]*v_re[bus2]
+#	-y12_im[bus1, bus2]*v_re[bus1]*v_im[bus2]
+
+# sur bilan bus2	
+#	+sum{(bus1, bus2) in branch} 
+#	+y22_re[bus1,bus2]*v_re[bus2]*v_re[bus2]
+#	+y22_re[bus1,bus2]*v_im[bus2]*v_im[bus2]
+#	+y21_re[bus1,bus2]*v_re[bus1]*v_re[bus2]
+#	+y21_re[bus1,bus2]*v_im[bus1]*v_im[bus2]
+#	+y21_im[bus1,bus2]*v_re[bus1]*v_im[bus2]
+#	-y21_im[bus1,bus2]*v_im[bus1]*v_re[bus2]
+
 
 subject to p_balance{bus in bus_i}:
-  +Pd[bus]/100
-  +sum{(bus, m) in branch} (+y11_re[bus,m]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus])+y12_re[bus,m]*(v_re[bus]*v_re[m]+v_im[bus]*v_im[m])+y12_im[bus,m]*(v_im[bus]*v_re[m]-v_re[bus]*v_im[m]))
-  +sum{(l, bus) in branch} (+y21_re[l,bus]*(v_re[l]*v_re[bus]+v_im[l]*v_im[bus])+y21_im[l,bus]*(v_re[l]*v_im[bus]-v_im[l]*v_re[bus])+y22_re[l,bus]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus]))
+  +Pd[bus]
+  #+sum{(bus, m) in branch} (+y11_re[bus,m]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus])+y12_re[bus,m]*(v_re[bus]*v_re[m]+v_im[bus]*v_im[m])+y12_im[bus,m]*(v_im[bus]*v_re[m]-v_re[bus]*v_im[m]))
+  #+sum{(l, bus) in branch} (+y21_re[l,bus]*(v_re[l]*v_re[bus]+v_im[l]*v_im[bus])+y21_im[l,bus]*(v_re[l]*v_im[bus]-v_im[l]*v_re[bus])+y22_re[l,bus]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus]))
+# sur bilan bus1
+	+sum{(bus1, bus2) in branch:bus==bus1}100* (
+	+y11_re[bus1, bus2]*v_re[bus1]*v_re[bus1]
+	+y11_re[bus1, bus2]*v_im[bus1]*v_im[bus1]
+	+y12_re[bus1, bus2]*v_re[bus1]*v_re[bus2]
+	+y12_re[bus1, bus2]*v_im[bus1]*v_im[bus2]
+	+y12_im[bus1, bus2]*v_im[bus1]*v_re[bus2]
+	-y12_im[bus1, bus2]*v_re[bus1]*v_im[bus2]
+	)
+
+# sur bilan bus2	
+	+sum{(bus1, bus2) in branch:bus==bus2} 100*(
+	+y22_re[bus1,bus2]*v_re[bus2]*v_re[bus2]
+	+y22_re[bus1,bus2]*v_im[bus2]*v_im[bus2]
+	+y21_re[bus1,bus2]*v_re[bus1]*v_re[bus2]
+	+y21_re[bus1,bus2]*v_im[bus1]*v_im[bus2]
+	+y21_im[bus1,bus2]*v_re[bus1]*v_im[bus2]
+	-y21_im[bus1,bus2]*v_im[bus1]*v_re[bus2]
+	)
+  
   =
-  (if bus in gen_i then p_gen[bus])
+  (if bus in gen_i then p_gen[bus])/100
   ;
+  
+	
+var  q_or{(l,m) in branch} = -y11_im[l,m]*v_hProd_re[l,l]+y12_re[l,m]*v_hProd_im[l,m]-y12_im[l,m]*v_hProd_re[l,m];
+var  q_ex{(l,m) in branch} = +y21_re[l,m]*v_hProd_im[m,l]-y21_im[l,m]*v_hProd_re[m,l]-y22_im[l,m]*v_hProd_re[m,m];
+  
+  
+  
 subject to q_balance{bus in bus_i}:
-  +Qd[bus]/100
-  +sum{(bus, m) in branch} (-y11_im[bus,m]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus])+y12_re[bus,m]*(v_im[bus]*v_re[m]-v_re[bus]*v_im[m])-y12_im[bus,m]*(v_re[bus]*v_re[m]+v_im[bus]*v_im[m]))
-  +sum{(l, bus) in branch} (+y21_re[l,bus]*(v_re[l]*v_im[bus]-v_im[l]*v_re[bus])-y21_im[l,bus]*(v_re[l]*v_re[bus]+v_im[l]*v_im[bus])-y22_im[l,bus]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus]))
+  +Qd[bus]
+  #+sum{(bus, m) in branch} (-y11_im[bus,m]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus])+y12_re[bus,m]*(v_im[bus]*v_re[m]-v_re[bus]*v_im[m])-y12_im[bus,m]*(v_re[bus]*v_re[m]+v_im[bus]*v_im[m]))
+  #+sum{(l, bus) in branch} (+y21_re[l,bus]*(v_re[l]*v_im[bus]-v_im[l]*v_re[bus])-y21_im[l,bus]*(v_re[l]*v_re[bus]+v_im[l]*v_im[bus])-y22_im[l,bus]*(v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus]))
+	+sum{(bus1, bus2) in branch:bus==bus1}100*(
+	  -y11_im[bus1,bus2]*v_re[bus1]*v_re[bus1]
+	  -y11_im[bus1,bus2]*v_im[bus1]*v_im[bus1]
+	  +y12_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
+	  -y12_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
+	  -y12_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
+	  -y12_im[bus1,bus2]*v_im[bus1]*v_im[bus2]
+	)
+	+sum{(bus1, bus2) in branch:bus==bus2}100*(
+	  -y22_im[bus1,bus2]*v_re[bus2]*v_re[bus2]
+	  -y22_im[bus1,bus2]*v_im[bus2]*v_im[bus2]
+	  +y21_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
+	  -y21_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
+	  -y21_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
+	  -y21_im[bus1,bus2]*v_im[bus1]*v_im[bus2]
+  )
   =
-  (if bus in gen_i then q_gen[bus])
+  (if bus in gen_i then q_gen[bus])/100
   ;
 
 
