@@ -22,7 +22,7 @@
 #
 # We refer the curious user of Couenne to this paper for more insight
 # on how the options are used.
-lp_solver cplex
+lp_solver clp
 
 
 #
@@ -206,7 +206,7 @@ feasibility_bt yes
 # that FBBT, but much more computationally intensive. Recommended 
 # for small problems. See also the next option.
 
-optimality_bt yes
+optimality_bt no
 
 
 # Specify the frequency (in terms of nodes) for optimality-based bound
@@ -312,7 +312,7 @@ log_num_local_optimization_per_level 2
 # A solution is feasible for the original problem if the maximum
 # violation of a constraint is below this number
 
-feas_tolerance 1e-3
+feas_tolerance 1e-6
 
 
 # Use quadratic expressions and related exprQuad class

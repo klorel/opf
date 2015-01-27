@@ -78,12 +78,14 @@ param y21_im{(l,m) in branch}:=  (-1/pst_ratio[l,m])*( line_B[l,m]*pst_cos[l,m]-
 var v_re{bus_i};
 var v_im{bus_i};
 
-var p_gen{gen in gen_i}
-  >= Pmin[gen]*100, <= Pmax[gen]*100
-  ;
-var q_gen{gen in gen_i} 
-  >= Qmin[gen]*100, <= Qmax[gen]*100
-  ;
+var p_gen{gen in gen_i};
+var q_gen{gen in gen_i};
+
+subject to lb_p_gen{gen in gen_i}: p_gen[gen] >= Pmin[gen]*100;
+subject to ub_p_gen{gen in gen_i}: p_gen[gen] <= Pmax[gen]*100;
+
+subject to lb_q_gen{gen in gen_i}: q_gen[gen] >= Qmin[gen]*100;
+subject to ub_q_gen{gen in gen_i}: q_gen[gen] <= Qmax[gen]*100;
 
 # linear equation I=YV
 # power flow equation
@@ -99,11 +101,11 @@ var i_ex_im{(l,m) in branch};
 
 # i_or = y_11 v_or + y_12 v_ex
 # i_ex = y_21 v_or + y_22 v_ex
-subject to  ctr_i_or_re{(l,m) in branch}: i_or_re[l,m] = +y11_re[l,m]*v_re[l]-y11_im[l,m]*v_im[l]+y12_re[l,m]*v_re[m]-y12_im[l,m]*v_im[m];
-subject to  ctr_i_or_im{(l,m) in branch}: i_or_im[l,m] = +y11_re[l,m]*v_im[l]+y11_im[l,m]*v_re[l]+y12_re[l,m]*v_im[m]+y12_im[l,m]*v_re[m];
+subject to  ctr_i_or_re{(l,m) in branch}: i_or_re[l,m] = 100*(+y11_re[l,m]*v_re[l]-y11_im[l,m]*v_im[l]+y12_re[l,m]*v_re[m]-y12_im[l,m]*v_im[m]);
+subject to  ctr_i_ex_re{(l,m) in branch}: i_ex_re[l,m] = 100*(+y21_re[l,m]*v_re[l]-y21_im[l,m]*v_im[l]+y22_re[l,m]*v_re[m]-y22_im[l,m]*v_im[m]);
 
-subject to  ctr_i_ex_re{(l,m) in branch}: i_ex_re[l,m] = +y21_re[l,m]*v_re[l]-y21_im[l,m]*v_im[l]+y22_re[l,m]*v_re[m]-y22_im[l,m]*v_im[m];
-subject to  ctr_i_ex_im{(l,m) in branch}: i_ex_im[l,m] = +y21_re[l,m]*v_im[l]+y21_im[l,m]*v_re[l]+y22_re[l,m]*v_im[m]+y22_im[l,m]*v_re[m];
+subject to  ctr_i_or_im{(l,m) in branch}: i_or_im[l,m] = 100*(+y11_re[l,m]*v_im[l]+y11_im[l,m]*v_re[l]+y12_re[l,m]*v_im[m]+y12_im[l,m]*v_re[m]);
+subject to  ctr_i_ex_im{(l,m) in branch}: i_ex_im[l,m] = 100*(+y21_re[l,m]*v_im[l]+y21_im[l,m]*v_re[l]+y22_re[l,m]*v_im[m]+y22_im[l,m]*v_re[m]);
 
 var i_re{bus in bus_i};
 var i_im{bus in bus_i};
@@ -127,8 +129,8 @@ subject to ctr_i_im{bus in bus_i}:
 # (Sd*-S_gen*)/v_or* = (Sd*-S_gen*)/|v_or|² v_or
 subject to i_balance_re{bus in bus_i}:
   +i_re[bus]
-  +sum{(bus1, bus2) in branch:bus==bus1}100*i_or_re[bus1, bus2]
-  +sum{(bus1, bus2) in branch:bus==bus2}100*i_ex_re[bus1, bus2]
+  +sum{(bus1, bus2) in branch:bus==bus1}i_or_re[bus1, bus2]
+  +sum{(bus1, bus2) in branch:bus==bus2}i_ex_re[bus1, bus2]
   =
   0
   ;
@@ -136,8 +138,8 @@ subject to i_balance_re{bus in bus_i}:
   
 subject to i_balance_im{bus in bus_i}:
   +i_im[bus]
-  +sum{(bus1, bus2) in branch:bus==bus1}100*i_or_im[bus1, bus2]
-  +sum{(bus1, bus2) in branch:bus==bus2}100*i_ex_im[bus1, bus2]
+  +sum{(bus1, bus2) in branch:bus==bus1}i_or_im[bus1, bus2]
+  +sum{(bus1, bus2) in branch:bus==bus2}i_ex_im[bus1, bus2]
   =
   0
   ;
