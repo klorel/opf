@@ -1,8 +1,8 @@
 model opf_lag.mod;
 
-data WB2.dat;
+#data WB2.dat;
 #data LMBM3.dat;
-#data WB5.dat;
+data WB5.dat;
 #data case9mod.dat;
 #data case14mod.dat;
 #data case39mod3.dat;
@@ -13,20 +13,26 @@ option master.cplex_options 'outlev=1';
 option master.solver_msg 0;
 
 option subproblem.solver_msg 0;
+option subproblem.presolve 0;
 param USE_HEURISTIC default 1; 
+param USE_IPS_KNITRO default 0; 
+param USE_IPS_COUENNE default 1; 
 param ORACLE symbolic default "KNITRO";
 set set_basis;
 param lb;
+param ZERO_RC_TOL := 1e-6;
 repeat{
 	###
 	#
 	###
 	problem master;
+	option presolve_eps 1e-16;
 	unfix lambda;
 	#expand;
 	solve>cplex.log;
 	let lb := master_obj;
-	let set_basis := {ite in 1..nIte:lambda[ite].sstatus == 'bas'};
+	
+	let set_basis := {ite in 1..nIte: lambda[ite].sstatus == 'bas'};
 	#display  master_basis;
 	let{bus in bus_i} dual_p[bus] := p_balance[bus].dual;
 	let{bus in bus_i} dual_q[bus] := q_balance[bus].dual;
@@ -42,8 +48,9 @@ repeat{
 	#
 	###	
 	problem subproblem;
-	option reset_initial_guesses 1;
-	#option subproblem.presolve 0;
+	option presolve_eps 1e-16;
+	option reset_initial_guesses 0;
+	option presolve 0;
 	if nIte > 0 then{
 		let{bus in bus_i} v_re[bus] := V_re[nIte,bus];
 		let{bus in bus_i} v_im[bus] := V_im[nIte,bus];
@@ -51,27 +58,34 @@ repeat{
 	unfix lambda;
 	fix{ite in 1..nIte diff master_basis} lambda[ite];
 	#display sub_obj;
-	let ORACLE := "KNITRO";
-	option subproblem.solver knitroampl;
-	option subproblem.knitro_options 'outlev=0 ms_enable=0';
-	close knitro.log;
-	let master_basis := set_basis;
-	solve>knitro.log;
-	let master_basis := {};
-	if sub_obj>=-1e-6 then{
-		let master_basis := set_basis;
-		let ORACLE := "KNITRO2";
+	if USE_HEURISTIC == 1 then {
+		let ORACLE := "KNITRO";
 		option subproblem.solver knitroampl;
-		option subproblem.knitro_options 'outlev=0 ms_enable=1 ms_maxsolves=10';
-		solve>knitro.log;
+		option subproblem.knitro_options 'outlev=3 ms_enable=0 presolve=0 scale=0 opttol=1 opttolabs=1e-6';
 		close knitro.log;
+		if USE_IPS_KNITRO == 1 then let master_basis := set_basis;
+		solve>knitro.log;
+		#display sub_obj; 
 		let master_basis := {};
-	}
-	if sub_obj>=-1e-6 then{
-		let master_basis := set_basis;
+		if sub_obj>=-ZERO_RC_TOL then{
+			if USE_IPS_KNITRO == 1 then let master_basis := set_basis;
+			let ORACLE := "KNITRO2";
+			option subproblem.solver knitroampl;
+			option subproblem.knitro_options 'outlev=0 ms_enable=1 ms_maxsolves=20 presolve=0 scale=0 opttol=1 opttolabs=1e-6';
+			solve>knitro.log;
+			close knitro.log;
+			let master_basis := {};
+		}
+	};
+	if USE_HEURISTIC == 0 or sub_obj>=-ZERO_RC_TOL then{
+		if USE_IPS_COUENNE == 1 then let master_basis := set_basis;
 		option subproblem.solver couenne;
-		option subproblem.couenne_options 'outlev=1';		
-		solve;#>couenne.log;
+		option subproblem.couenne_options 'outlev=1';
+		#expand;
+		#display lambda.sstatus;
+		#display set_basis;		
+		#solve>couenne.log;
+		solve;
 		let ORACLE := "COUENNE";
 		let master_basis := {};
 	}
@@ -80,7 +94,7 @@ repeat{
 	let{bus in bus_i} V_re[nIte,bus] := v_re[bus];
 	let{bus in bus_i} V_im[nIte,bus] := v_im[bus];
 	#display v_re, v_im;
-	if sub_obj>=-1e-6 then{
+	if sub_obj>=-ZERO_RC_TOL then{
 		if FEASIBILITY == 0 then {
          	printf "\n*** OPTIMAL SOLUTION ***\n";
          	printf "LowerBound       : %q\n", master_obj;
@@ -89,7 +103,7 @@ repeat{
          	fix;
          	break;
          }else {
-			if master_obj > 1e-6 then{
+			if master_obj > ZERO_RC_TOL then{
 				printf "\n*** NO FEASIBLE SOLUTION ***\n";
 				break;
 			}else{

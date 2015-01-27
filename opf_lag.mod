@@ -125,13 +125,16 @@ set master_basis default {};
 ###
 problem master;
 param FEASIBILITY default 1;
-var p_gen{gen in gen_i}
-  >= Pmin[gen]*100, <= Pmax[gen]*100
-  ;
-var q_gen{gen in gen_i} 
-  >= Qmin[gen]*100, <= Pmax[gen]*100
-  ;
+var p_gen{gen in gen_i};
+subject to p_gen_min{gen in gen_i}: p_gen[gen] >= Pmin[gen]*100;
+subject to p_gen_max{gen in gen_i}: p_gen[gen] <= Pmax[gen]*100;
+
+var q_gen{gen in gen_i};
+subject to q_gen_min{gen in gen_i}: q_gen[gen] >= Qmin[gen]*100;
+subject to q_gen_max{gen in gen_i}: q_gen[gen] <= Qmax[gen]*100;
+
 var lambda{ite in 1..nIte} >= 0;
+
 var fake_lambda >= 0;
 
 var p_pos{bus in bus_i} >= 0;
@@ -178,10 +181,49 @@ minimize master_obj:
 ###
 # sub
 ###
-problem subproblem: p_gen, q_gen, lambda, p_pos, p_neg, q_pos, q_neg;
+problem subproblem: 
+	p_gen, p_gen_min, p_gen_max, 
+	q_gen, q_gen_min, q_gen_max,
+	lambda, p_pos, p_neg, q_pos, q_neg;
 
 var v_re{bus in bus_i}, >= -Vmax[bus], <= Vmax[bus];
 var v_im{bus in bus_i}, >= -Vmax[bus], <= Vmax[bus];
+
+
+var p_or{(bus1, bus2) in branch};
+var p_ex{(bus1, bus2) in branch};
+var q_or{(bus1, bus2) in branch};
+var q_ex{(bus1, bus2) in branch};
+
+
+subject to p_or_eq{(bus1, bus2) in branch}: p_or[bus1, bus2] = 
+		+y11_re[bus1, bus2]*v_re[bus1]*v_re[bus1]
+		+y11_re[bus1, bus2]*v_im[bus1]*v_im[bus1]
+		+y12_re[bus1, bus2]*v_re[bus1]*v_re[bus2]
+		+y12_re[bus1, bus2]*v_im[bus1]*v_im[bus2]
+		+y12_im[bus1, bus2]*v_im[bus1]*v_re[bus2]
+		-y12_im[bus1, bus2]*v_re[bus1]*v_im[bus2];
+subject to p_ex_eq{(bus1, bus2) in branch}: p_ex[bus1, bus2] = 
+		+y22_re[bus1,bus2]*v_re[bus2]*v_re[bus2]
+		+y22_re[bus1,bus2]*v_im[bus2]*v_im[bus2]
+		+y21_re[bus1,bus2]*v_re[bus1]*v_re[bus2]
+		+y21_re[bus1,bus2]*v_im[bus1]*v_im[bus2]
+		+y21_im[bus1,bus2]*v_re[bus1]*v_im[bus2]
+		-y21_im[bus1,bus2]*v_im[bus1]*v_re[bus2];
+subject to q_or_eq{(bus1, bus2) in branch}: q_or[bus1, bus2] = 
+ 		-y11_im[bus1,bus2]*v_re[bus1]*v_re[bus1]
+		 -y11_im[bus1,bus2]*v_im[bus1]*v_im[bus1]
+		 +y12_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
+		 -y12_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
+		 -y12_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
+		 -y12_im[bus1,bus2]*v_im[bus1]*v_im[bus2];
+subject to q_ex_eq{(bus1, bus2) in branch}: q_ex[bus1, bus2] = 
+		-y22_im[bus1,bus2]*v_re[bus2]*v_re[bus2]
+  		-y22_im[bus1,bus2]*v_im[bus2]*v_im[bus2]
+  		+y21_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
+  		-y21_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
+  		-y21_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
+  		-y21_im[bus1,bus2]*v_im[bus1]*v_im[bus2];
 
 # convex
 var ips_lambda >= 0;
@@ -191,7 +233,7 @@ subject to ref_bus_im{bus in bus_i:type[bus]==3}:v_im[bus] = 0;
 subject to ctr_v_min{bus in bus_i}: v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus] >= Vmin[bus]^2;
 subject to ctr_v_max{bus in bus_i}: v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus] <= Vmax[bus]^2;
 
-minimize sub_obj:
+minimize sub_obj2:
 -sum{bus in bus_i, (bus1, bus2) in branch:bus==bus1} dual_p[bus]*100*(
 		+y11_re[bus1, bus2]*v_re[bus1]*v_re[bus1]
 		+y11_re[bus1, bus2]*v_im[bus1]*v_im[bus1]
@@ -221,6 +263,12 @@ minimize sub_obj:
   		-y21_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
   		-y21_im[bus1,bus2]*v_im[bus1]*v_im[bus2])
 	-dual_convexity;
+minimize sub_obj:
+	-sum{bus in bus_i, (bus1, bus2) in branch:bus==bus1} dual_p[bus]*100*p_or[bus1, bus2]
+	-sum{bus in bus_i, (bus1, bus2) in branch:bus==bus2} dual_p[bus]*100*p_ex[bus1, bus2]
+	-sum{bus in bus_i, (bus1, bus2) in branch:bus==bus1} dual_q[bus]*100*q_or[bus1, bus2]
+	-sum{bus in bus_i, (bus1, bus2) in branch:bus==bus2} dual_q[bus]*100*q_ex[bus1, bus2]
+	-dual_convexity;
 
 subject to ips_convexity{tmp in 1..1:FEASIBILITY==0 and card(master_basis)>0}: 
 	ips_lambda+sum{ite in master_basis} lambda[ite]=1;
@@ -229,20 +277,8 @@ subject to ips_p_balance{bus in bus_i: FEASIBILITY==0 and card(master_basis)>0}:
  	-(if bus in gen_i then p_gen[bus])/100
   	+sum{ite in master_basis, (bus1, bus2) in branch:bus==bus1} P_or[ite,bus1,bus2]*lambda[ite]
   	+sum{ite in master_basis, (bus1, bus2) in branch:bus==bus2} P_ex[ite,bus1,bus2]*lambda[ite]
-	+sum{(bus1, bus2) in branch:bus==bus1}ips_lambda*100*(
-		+y11_re[bus1, bus2]*v_re[bus1]*v_re[bus1]
-		+y11_re[bus1, bus2]*v_im[bus1]*v_im[bus1]
-		+y12_re[bus1, bus2]*v_re[bus1]*v_re[bus2]
-		+y12_re[bus1, bus2]*v_im[bus1]*v_im[bus2]
-		+y12_im[bus1, bus2]*v_im[bus1]*v_re[bus2]
-		-y12_im[bus1, bus2]*v_re[bus1]*v_im[bus2])
-	+sum{(bus1, bus2) in branch:bus==bus2} ips_lambda*100*(
-		+y22_re[bus1,bus2]*v_re[bus2]*v_re[bus2]
-		+y22_re[bus1,bus2]*v_im[bus2]*v_im[bus2]
-		+y21_re[bus1,bus2]*v_re[bus1]*v_re[bus2]
-		+y21_re[bus1,bus2]*v_im[bus1]*v_im[bus2]
-		+y21_im[bus1,bus2]*v_re[bus1]*v_im[bus2]
-		-y21_im[bus1,bus2]*v_im[bus1]*v_re[bus2])
+	+sum{(bus1, bus2) in branch:bus==bus1}100*p_or[bus1, bus2]
+	+sum{(bus1, bus2) in branch:bus==bus2}100*p_ex[bus1, bus2]
   	=
   	-Pd[bus]
   ;
@@ -250,20 +286,8 @@ subject to ips_q_balance{bus in bus_i: FEASIBILITY==0 and card(master_basis)>0}:
   	-(if bus in gen_i then q_gen[bus])/100
   	+sum{ite in master_basis, (bus1, bus2) in branch:bus==bus1} Q_or[ite,bus1,bus2]*lambda[ite]
   	+sum{ite in master_basis, (bus1, bus2) in branch:bus==bus2} Q_ex[ite,bus1,bus2]*lambda[ite]
-	+sum{(bus1, bus2) in branch:bus==bus1} ips_lambda*100*(
- 		-y11_im[bus1,bus2]*v_re[bus1]*v_re[bus1]
-		 -y11_im[bus1,bus2]*v_im[bus1]*v_im[bus1]
-		 +y12_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
-		 -y12_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
-		 -y12_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
-		 -y12_im[bus1,bus2]*v_im[bus1]*v_im[bus2])
-	+sum{(bus1, bus2) in branch:bus==bus2} ips_lambda*100*(
-		-y22_im[bus1,bus2]*v_re[bus2]*v_re[bus2]
-  		-y22_im[bus1,bus2]*v_im[bus2]*v_im[bus2]
-  		+y21_re[bus1,bus2]*v_re[bus1]*v_im[bus2]
-  		-y21_re[bus1,bus2]*v_im[bus1]*v_re[bus2]
-  		-y21_im[bus1,bus2]*v_re[bus1]*v_re[bus2]
-  		-y21_im[bus1,bus2]*v_im[bus1]*v_im[bus2])
+	+sum{(bus1, bus2) in branch:bus==bus1}100*q_or[bus1, bus2]
+	+sum{(bus1, bus2) in branch:bus==bus2}100*q_ex[bus1, bus2]
   	=
   	-Qd[bus]
   ;

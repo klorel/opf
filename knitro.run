@@ -1,22 +1,26 @@
-model opf.mod;
+#model opf.mod;
+model opf2.mod;
 
-# data WB2.dat;
-# data LMBM3.dat;
-# data WB5.dat;
-# data case9mod.dat;
-# data case14mod.dat;
-data case39mod3.dat;
-
+#data WB2.dat;
+#data LMBM3.dat;
+#data WB5.dat;
+data case9mod.dat;
+#data case14mod.dat;
+#data case39mod3.dat;
 
 option solver knitroampl;
-option knitro_options 'outlev=3';
+option knitro_options 'outlev=3 ms_enable=1';
 solve;
 #write gtoto;
-display p_gen.slack, q_gen.slack;
-display p_balance.slack, q_balance.slack;
-display ctr_v_min.slack, ctr_v_max.slack;
-# expand;
+#display p_gen.slack, q_gen.slack;
+#display p_balance.slack, q_balance.slack;
+#display ctr_v_min.slack, ctr_v_max.slack;
+
+#display act_cost;
+#display v_re, v_im;
+#display p_or, p_ex, q_or, q_ex;
+
 fix;
-display act_cost;
-display v_re, v_im;
-display p_or, p_ex, q_or, q_ex;
+#display hProduct;
+#expand p_balance;
+

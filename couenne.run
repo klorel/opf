@@ -1,12 +1,18 @@
-model opf.mod;
+#model opf.mod;
+model opf2.mod;
 
-data WB2.dat;
+#data WB2.dat;
 #data LMBM3.dat;
 #data WB5.dat;
-#data case9mod.dat;
+data case9mod.dat;
 #data case14mod.dat;
 #data case39mod3.dat;
 
+option presolve 10;
+
+option solver knitroampl;
+option knitro_options 'outlev=3 ms_enable=1 ms_maxsolves=20';
+solve;
 
 option solver couenne;
 #option solver cplexamp;
@@ -23,3 +29,4 @@ solve;
 fix;
 #display hProduct;
 #expand p_balance;
+#expand;
