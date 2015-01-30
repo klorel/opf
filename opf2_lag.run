@@ -1,9 +1,9 @@
 model opf2_lag.mod;
 
-data WB2.dat;
+#data WB2.dat;
 #data LMBM3.dat;
 #data WB5.dat;
-#data case9mod.dat;
+data case9mod.dat;
 #data case14mod.dat;
 #data case39mod3.dat;
 option presolve_eps 1e-6;
@@ -13,7 +13,7 @@ option master.cplex_options 'outlev=1';
 option master.solver_msg 0;
 
 option slave.solver_msg 0;
-option slave.presolve 0;
+option slave.presolve 10;
 param USE_HEURISTIC default 1; 
 param USE_IPS_KNITRO default 0; 
 param USE_IPS_COUENNE default 1; 
@@ -48,30 +48,28 @@ repeat{
 	#
 	###	
 	problem slave;
-	option presolve_eps 1e-16;
-	option reset_initial_guesses 1;
-	option presolve 0;
 	#display slave_obj;
 	#fix;
 	if USE_HEURISTIC == 1 then {
 		let ORACLE := "KNITRO";
 		option slave.solver knitroampl;
-		option slave.knitro_options 'outlev=3 ms_enable=0 presolve=0 scale=0 opttol=1 opttolabs=1e-6';
+		option slave.knitro_options 'outlev=3 ms_enable=0 presolve=0 scale=0 feastol=1 feastolabs=1e-6 opttol=1 opttolabs=1e-6';
 		close knitro.log;
 		solve>knitro.log;
 		if slave_obj>=-ZERO_RC_TOL then{
 			let ORACLE := "KNITRO2";
 			option slave.solver knitroampl;
-			option slave.knitro_options 'outlev=0 ms_enable=1 ms_maxsolves=20 presolve=0 scale=0 opttol=1 opttolabs=1e-6';
+			option slave.knitro_options 'outlev=0 ms_enable=1 ms_maxsolves=20 presolve=0 scale=0  feastol=1 feastolabs=1e-6 opttol=1 opttolabs=1e-6';
 			solve>knitro.log;
 			close knitro.log;
 		}
 	};
 	if USE_HEURISTIC == 0 or slave_obj>=-ZERO_RC_TOL then{
 		option slave.solver couenne;
-		option slave.couenne_options 'outlev=1';
-		#solve;	
-		solve>couenne.log;
+		#option slave.couenne_options 'outlev=1';
+		expand;
+		solve;	
+		#solve>couenne.log;
 		close couenne.log;
 		let ORACLE := "COUENNE";
 	}
@@ -85,6 +83,7 @@ repeat{
 	let{bus in bus_i} I_im[nIte,bus] := i_im[bus];
 	#display v_re, v_im;
 	
+ 	printf "%10s%6d%20.6f%20.6f%10s\n", if IS_PHASE_ONE == 1 then "PHASE1" else "PHASE2", nIte, lb, slave_obj, ORACLE;
 	if slave_obj>=-ZERO_RC_TOL then{
 		if IS_PHASE_ONE == 0 then {
          	printf "\n*** OPTIMAL SOLUTION ***\n";
@@ -95,16 +94,15 @@ repeat{
          }else {
 			if master_obj > ZERO_RC_TOL then{
 				printf "\n*** NO FEASIBLE SOLUTION ***\n";
-				#break;
-				let IS_PHASE_ONE := 0;		
+				printf "Minimum infeasibilities : %q\n", master_obj;
+				break;				
 			}else{
 				printf "\n*** PHASE 2 ***\n";
-				let IS_PHASE_ONE := 0;					
+				let IS_PHASE_ONE := 0;				
 			}
       }
 	};
  	#display FEASIBILITY;
- 	printf "%10s%6d%20.6f%20.6f%10s\n", if IS_PHASE_ONE == 1 then "PHASE1" else "PHASE2", nIte, lb, slave_obj, ORACLE;
  	
 	#if nIte >25 then exit;
 };

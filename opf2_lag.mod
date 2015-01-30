@@ -161,19 +161,21 @@ subject to ref_bus_im{bus in bus_i:type[bus]==3}:v_im[bus] = 0;
 
 subject to ctr_v_min{bus in bus_i}: Vmin[bus]^2 <= v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus];
 subject to ctr_v_max{bus in bus_i}: Vmax[bus]^2 >= v_re[bus]*v_re[bus]+v_im[bus]*v_im[bus];
+#subject to ctr_v_min{bus in bus_i}: -Vmax[bus] <= v_re[bus] <= Vmax[bus];
+#subject to ctr_v_max{bus in bus_i}: -Vmax[bus] <= v_im[bus] <= Vmax[bus];
 
 minimize slave_obj: 
   +sum{gen in gen_i:IS_PHASE_ONE==0}(c0[gen]+c1[gen]*p_gen[gen]+c2[gen]*p_gen[gen]^2)
-  -sum{bus in bus_i}dual_re[bus]*(
+  -sum{bus in bus_i}(dual_re[bus]*(
     +i_re[bus]
     +sum{(l, m) in branch:bus==l}(100*(+y11_re[l,m]*v_re[l]-y11_im[l,m]*v_im[l]+y12_re[l,m]*v_re[m]-y12_im[l,m]*v_im[m]))
-    +sum{(l, m) in branch:bus==m}(100*(+y21_re[l,m]*v_im[l]+y21_im[l,m]*v_re[l]+y22_re[l,m]*v_im[m]+y22_im[l,m]*v_re[m]))
-  )
-  -sum{bus in bus_i}dual_im[bus]*(
+    +sum{(l, m) in branch:bus==m}(100*(+y21_re[l,m]*v_re[l]-y21_im[l,m]*v_im[l]+y22_re[l,m]*v_re[m]-y22_im[l,m]*v_im[m]))
+  ))
+  -sum{bus in bus_i}(dual_im[bus]*(
     +i_im[bus]
-    +sum{(l, m) in branch:bus==l}(100*(+y21_re[l,m]*v_re[l]-y21_im[l,m]*v_im[l]+y22_re[l,m]*v_re[m]-y22_im[l,m]*v_im[m]))
-    +sum{(l, m) in branch:bus==m}(100*(+y11_re[l,m]*v_im[l]+y11_im[l,m]*v_re[l]+y12_re[l,m]*v_im[m]+y12_im[l,m]*v_re[m]))  	
-  )
+    +sum{(l, m) in branch:bus==l}(100*(+y11_re[l,m]*v_im[l]+y11_im[l,m]*v_re[l]+y12_re[l,m]*v_im[m]+y12_im[l,m]*v_re[m]))
+    +sum{(l, m) in branch:bus==m}(100*(+y21_re[l,m]*v_im[l]+y21_im[l,m]*v_re[l]+y22_re[l,m]*v_im[m]+y22_im[l,m]*v_re[m]))  	
+  ))
   -dual_convexity
 ;
 
