@@ -114,17 +114,19 @@ var i_im{bus in bus_i};
 # s_or = v_or i_or*
 # s_ex = v_ex i_ex*
 
+# v.i*=s
+
 subject to ctr_i_re{bus in bus_i}:
   +i_re[bus]*v_re[bus]
   +i_im[bus]*v_im[bus] 
   = 
   +(+Pd[bus]-(if bus in gen_i then p_gen[bus])/100)
   ;
-subject to ctr_i_im{bus in bus_i}: 
-  +i_im[bus]*v_re[bus] 
-  -i_re[bus]*v_im[bus]
+subject to ctr_i_im{bus in bus_i}:  
+  +i_re[bus]*v_im[bus]
+  -i_im[bus]*v_re[bus]
   =
-  -(+Qd[bus]-(if bus in gen_i then q_gen[bus])/100)
+  +(+Qd[bus]-(if bus in gen_i then q_gen[bus])/100)
   ;
 # (Sd*-S_gen*)/v_or* = (Sd*-S_gen*)/|v_or|² v_or
 subject to i_balance_re{bus in bus_i}:

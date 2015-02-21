@@ -22,7 +22,7 @@
 #
 # We refer the curious user of Couenne to this paper for more insight
 # on how the options are used.
-lp_solver cplex
+lp_solver clp
 
 
 #

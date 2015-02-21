@@ -1,9 +1,9 @@
 model opf2_lag.mod;
 
-#data WB2.dat;
+data WB2.dat;
 #data LMBM3.dat;
 #data WB5.dat;
-data case9mod.dat;
+#data case9mod.dat;
 #data case14mod.dat;
 #data case39mod3.dat;
 option presolve_eps 1e-6;
@@ -13,7 +13,7 @@ option master.cplex_options 'outlev=1';
 option master.solver_msg 0;
 
 option slave.solver_msg 0;
-option slave.presolve 10;
+option slave.presolve 0;
 param USE_HEURISTIC default 1; 
 param USE_IPS_KNITRO default 0; 
 param USE_IPS_COUENNE default 1; 
@@ -67,10 +67,10 @@ repeat{
 	if USE_HEURISTIC == 0 or slave_obj>=-ZERO_RC_TOL then{
 		option slave.solver couenne;
 		#option slave.couenne_options 'outlev=1';
-		expand;
-		solve;	
-		#solve>couenne.log;
+		#expand;
 		close couenne.log;
+		#solve;	
+		solve>couenne.log;
 		let ORACLE := "COUENNE";
 	}
 	#display slave_obj;

@@ -54,6 +54,7 @@ param line_B{(l,m) in branch}   := -x[l,m]/(r[l,m]^2+x[l,m]^2);
 
 param pst_ratio{(l,m) in branch} := 1;
 param pst_angle{(l,m) in branch} := 0;
+
 param pst_cos{(l,m) in branch} := cos(pst_angle[l,m]);
 param pst_sin{(l,m) in branch} := sin(pst_angle[l,m]);
 
@@ -149,11 +150,11 @@ subject to ctr_i_re{bus in bus_i}:
   = 
   +(+Pd[bus]-(if bus in gen_i then p_gen[bus])/100)
   ;
-subject to ctr_i_im{bus in bus_i}: 
-  +i_im[bus]*v_re[bus] 
-  -i_re[bus]*v_im[bus]
+subject to ctr_i_im{bus in bus_i}:  
+  +i_re[bus]*v_im[bus]
+  -i_im[bus]*v_re[bus]
   =
-  -(+Qd[bus]-(if bus in gen_i then q_gen[bus])/100)
+  +(+Qd[bus]-(if bus in gen_i then q_gen[bus])/100)
   ;
   
 subject to ref_bus_re{bus in bus_i:type[bus]==3}:v_re[bus]>= 0;

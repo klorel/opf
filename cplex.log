@@ -1,0 +1,379 @@
+CPLEX 12.6.0.0: outlev=1
+LP Presolve eliminated 1 rows and 5 columns.
+All rows and columns eliminated.
+CPLEX 12.6.0.0: outlev=1
+Using steepest-edge.
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =             1.000000
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =           873.502098
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =           873.245057
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =           873.156535
+CPLEX 12.6.0.0: outlev=1
+Using devex.
+
+Iteration log . . .
+Iteration:     1    Objective     =           873.137478
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           872.876966
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           872.830667
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           872.050655
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           871.823971
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           871.488073
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           871.033162
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.926499
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.864508
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.823841
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.803402
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.780477
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.768181
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.766103
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.758735
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.752187
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.751026
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.749780
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.749200
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748568
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748539
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748417
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748408
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748375
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748368
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748348
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748341
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748323
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748317
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748317
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748314
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748303
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748296
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748296
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748296
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748296
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748296
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748295
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.748249
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747739
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747737
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747731
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747714
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747705
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747697
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747687
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747684
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747680
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747678
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747677
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747677
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747677
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747677
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747677
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747638
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747157
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747156
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747156
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747155
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747155
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747155
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747147
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.747136
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746755
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746747
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746747
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746747
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746737
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746649
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746643
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746554
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746478
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746262
+CPLEX 12.6.0.0: outlev=1
+
+Iteration log . . .
+Iteration:     1    Objective     =           870.746261

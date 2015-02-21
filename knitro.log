@@ -1,0 +1,97 @@
+KNITRO 9.0.1: outlev=3
+ms_enable=0
+presolve=0
+scale=0
+feastol=1
+feastolabs=1e-6
+opttol=1
+opttolabs=1e-6
+KNITRO: Number of threads = 1
+
+======================================
+       Commercial Ziena License
+             KNITRO 9.0.1
+          Ziena Optimization
+======================================
+
+feastol:              1
+feastol_abs:          1e-06
+hessian_no_f:         1
+opttol:               1
+opttol_abs:           1e-06
+outlev:               3
+par_concurrent_evals: 0
+presolve:             0
+scale:                0
+KNITRO changing bar_switchrule from AUTO to 2.
+KNITRO changing algorithm from AUTO to 1.
+KNITRO changing bar_murule from AUTO to 4.
+KNITRO changing bar_initpt from AUTO to 3.
+KNITRO changing bar_penaltyrule from AUTO to 2.
+KNITRO changing bar_penaltycons from AUTO to 1.
+KNITRO changing linsolver from AUTO to 2.
+
+Problem Characteristics
+-----------------------
+Objective goal:  Minimize
+Number of variables:                    10
+    bounded below:                       0
+    bounded above:                       0
+    bounded below and above:             0
+    fixed:                               0
+    free:                               10
+Number of constraints:                  14
+    linear equalities:                   1
+    nonlinear equalities:                4
+    linear inequalities:                 5
+    nonlinear inequalities:              4
+    range:                               0
+Number of nonzeros in Jacobian:         32
+Number of nonzeros in Hessian:          12
+
+  Iter      Objective      FeasError   OptError    ||Step||    CGits 
+--------  --------------  ----------  ----------  ----------  -------
+       0   -9.094947e-13   4.277e-06
+       1    8.255339e+01   6.783e-01   1.921e+02   4.624e+00        0
+       2    1.508994e+01   3.369e-02   1.025e+01   3.640e-01        2
+       3    1.443078e+01   1.521e-03   4.659e+00   1.376e+00        0
+       4    1.385751e+01   2.439e-04   2.232e-01   1.045e+00        0
+       5    1.387577e+01   3.810e-05   8.116e-02   8.973e-01        0
+       6    1.387839e+01   3.153e-05   4.079e-02   2.520e+01        0
+       7    1.387908e+01   3.215e-05   3.061e-02   2.021e+01        0
+       8    1.387960e+01   3.150e-05   2.296e-02   2.311e+01        0
+       9    1.388000e+01   2.980e-05   1.723e-02   2.553e+01        0
+      10    1.388030e+01   2.731e-05   1.292e-02   2.712e+01        0
+      11    1.388052e+01   2.429e-05   9.694e-03   2.765e+01        0
+      12    1.388086e+01   2.337e-05   4.851e-03   5.406e+01        0
+      13    1.388121e+01   1.946e-05   4.303e-03   9.300e+01        0
+      14    1.388117e+01   4.607e-08   9.711e-06   1.813e+02        0
+      15    1.388116e+01   7.433e-09   3.389e-01   1.180e+02        0
+      16    1.388116e+01   7.203e-11   1.000e-08   4.504e-01        0
+
+EXIT: Locally optimal solution found.
+
+Final Statistics
+----------------
+Final objective value               =   1.38811554945307e+01
+Final feasibility error (abs / rel) =   7.20e-11 / 7.20e-11
+Final optimality error  (abs / rel) =   1.00e-08 / 4.83e-12
+# of iterations                     =         16 
+# of CG iterations                  =          2 
+# of function evaluations           =         29
+# of gradient evaluations           =         17
+# of Hessian evaluations            =         16
+Total program time (secs)           =       0.00137 (     0.001 CPU time)
+Time spent in evaluations (secs)    =       0.00010
+
+===============================================================================
+
+KNITRO 9.0.1: outlev=0
+ms_enable=1
+ms_maxsolves=20
+presolve=0
+scale=0
+feastol=1
+feastolabs=1e-6
+opttol=1
+opttolabs=1e-6
